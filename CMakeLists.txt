@@ -26,15 +26,10 @@ set( SOURCE_ONE_WEEKEND
 "hittable.h" 
 "sphere.h" 
 "hittable_list.h" 
-"rtweekend.h")
-
-
-# Add source to this project's executable.
-add_executable (RayTracingInOneWeekend ${SOURCE_ONE_WEEKEND})
-
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET RayTracingInOneWeekend PROPERTY CXX_STANDARD 20)
-endif()
+"rtweekend.h" 
+"interval.h" 
+"camera.h" 
+"material.h")
 
 # Specific compiler flags below. We're not going to add options for all possible compilers, but if
 # you're new to CMake (like we are), the following may be a helpful example if you're using a
@@ -62,5 +57,8 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wsometimes-uninitialized) # Variable improperly initialized
     add_compile_options(-Wunused-variable) # Variable is defined but unused
 endif()
+
+# Add source to this project's executable.
+add_executable (RayTracingInOneWeekend ${SOURCE_ONE_WEEKEND})
 
 
