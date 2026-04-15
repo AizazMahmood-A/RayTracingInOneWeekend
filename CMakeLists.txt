@@ -17,6 +17,9 @@ set ( CMAKE_CXX_EXTENSIONS OFF)
 
 # Source
 
+set(EXTERNAL 
+"external/stb_image.h")
+
 set( SOURCE_ONE_WEEKEND 
 "OneWeekend/RayTracingInOneWeekend.h"
 "OneWeekend/RayTracingInOneWeekend.cpp"
@@ -45,7 +48,9 @@ set( SOURCE_NEXT_WEEK
 "TheNextWeek/camera.h" 
 "TheNextWeek/material.h" 
 "TheNextWeek/aabb.h" 
-"TheNextWeek/bvh.h" "TheNextWeek/texture.h")
+"TheNextWeek/bvh.h" 
+"TheNextWeek/texture.h" 
+"TheNextWeek/rtw_stb_image.h")
 
 
 # Specific compiler flags below. We're not going to add options for all possible compilers, but if
@@ -76,7 +81,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # Add source to this project's executable.
-add_executable (RayTracingInOneWeekend ${SOURCE_ONE_WEEKEND})
-add_executable (RayTracingTheNextWeek ${SOURCE_NEXT_WEEK})
+add_executable (RayTracingInOneWeekend ${EXTERNAL} ${SOURCE_ONE_WEEKEND})
+add_executable (RayTracingTheNextWeek ${EXTERNAL} ${SOURCE_NEXT_WEEK})
 
 
