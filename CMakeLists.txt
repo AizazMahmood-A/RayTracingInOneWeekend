@@ -18,18 +18,35 @@ set ( CMAKE_CXX_EXTENSIONS OFF)
 # Source
 
 set( SOURCE_ONE_WEEKEND 
-"RayTracingInOneWeekend.h"
-"RayTracingInOneWeekend.cpp"
-"vec3.h"
-"color.h" 
-"ray.h" 
-"hittable.h" 
-"sphere.h" 
-"hittable_list.h" 
-"rtweekend.h" 
-"interval.h" 
-"camera.h" 
-"material.h")
+"OneWeekend/RayTracingInOneWeekend.h"
+"OneWeekend/RayTracingInOneWeekend.cpp"
+"OneWeekend/vec3.h"
+"OneWeekend/color.h" 
+"OneWeekend/ray.h" 
+"OneWeekend/hittable.h" 
+"OneWeekend/sphere.h" 
+"OneWeekend/hittable_list.h" 
+"OneWeekend/rtweekend.h" 
+"OneWeekend/interval.h" 
+"OneWeekend/camera.h" 
+"OneWeekend/material.h" )
+
+set( SOURCE_NEXT_WEEK 
+"TheNextWeek/RayTracingInOneWeekend.h"
+"TheNextWeek/RayTracingInOneWeekend.cpp"
+"TheNextWeek/vec3.h"
+"TheNextWeek/color.h" 
+"TheNextWeek/ray.h" 
+"TheNextWeek/hittable.h" 
+"TheNextWeek/sphere.h" 
+"TheNextWeek/hittable_list.h" 
+"TheNextWeek/rtweekend.h" 
+"TheNextWeek/interval.h" 
+"TheNextWeek/camera.h" 
+"TheNextWeek/material.h" 
+"TheNextWeek/aabb.h" 
+"TheNextWeek/bvh.h" "TheNextWeek/texture.h")
+
 
 # Specific compiler flags below. We're not going to add options for all possible compilers, but if
 # you're new to CMake (like we are), the following may be a helpful example if you're using a
@@ -60,5 +77,6 @@ endif()
 
 # Add source to this project's executable.
 add_executable (RayTracingInOneWeekend ${SOURCE_ONE_WEEKEND})
+add_executable (RayTracingTheNextWeek ${SOURCE_NEXT_WEEK})
 
 
