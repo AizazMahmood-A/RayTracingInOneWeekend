@@ -17,7 +17,7 @@ set ( CMAKE_CXX_EXTENSIONS OFF)
 
 # Source
 
-set(EXTERNAL 
+set( EXTERNAL 
 "external/stb_image.h")
 
 set( SOURCE_ONE_WEEKEND 
@@ -50,7 +50,9 @@ set( SOURCE_NEXT_WEEK
 "TheNextWeek/aabb.h" 
 "TheNextWeek/bvh.h" 
 "TheNextWeek/texture.h" 
-"TheNextWeek/rtw_stb_image.h")
+"TheNextWeek/rtw_stb_image.h" 
+"TheNextWeek/perlin.h"
+"TheNextWeek/quad.h")
 
 
 # Specific compiler flags below. We're not going to add options for all possible compilers, but if

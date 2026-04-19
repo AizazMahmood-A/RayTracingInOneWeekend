@@ -36,7 +36,7 @@ public:
     // padding
     interval expand(double delta) const {
         auto padding = delta / 2;
-        return interval(min - padding, max - padding);
+        return interval(min - padding, max + padding);
     }
 
     static const interval empty, universe;
