@@ -52,7 +52,8 @@ set( SOURCE_NEXT_WEEK
 "TheNextWeek/texture.h" 
 "TheNextWeek/rtw_stb_image.h" 
 "TheNextWeek/perlin.h"
-"TheNextWeek/quad.h")
+"TheNextWeek/quad.h" 
+"TheNextWeek/constant_medium.h")
 
 
 # Specific compiler flags below. We're not going to add options for all possible compilers, but if
