@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt : CMake project for RayTracingInOneWeekend, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.8...4.0.0)
+cmake_minimum_required (VERSION 3.18...4.0.0)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -9,14 +9,23 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("RayTracingInOneWeekend")
+# Add CUDA and CXX to Project
+project ("RayTracingInOneWeekend" LANGUAGES CXX CUDA)
 
+# add CUDAToolKit
+find_package(CUDAToolkit REQUIRED)
+
+# Set CXX Standard
 set ( CMAKE_CXX_STANDARD 20 )
 set ( CMAKE_CXX_STANDARD_REQUIRED ON)
 set ( CMAKE_CXX_EXTENSIONS OFF)
 
-# Source
+# Set CUDA Standard
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_ARCHITECTURES "native")
 
+# Source
 set( EXTERNAL 
 "external/stb_image.h")
 
@@ -53,8 +62,27 @@ set( SOURCE_NEXT_WEEK
 "TheNextWeek/rtw_stb_image.h" 
 "TheNextWeek/perlin.h"
 "TheNextWeek/quad.h" 
-"TheNextWeek/constant_medium.h")
+"TheNextWeek/constant_medium.h" )
 
+set( SOURCE_CUDA_RT 
+"CudaRT/kernel.cu"
+ "CudaRT/aabb.h" 
+ "CudaRT/bvh.h" 
+ "CudaRT/camera.h" 
+ "CudaRT/color.h" 
+ "CudaRT/constant_medium.h" 
+ "CudaRT/hittable.h" 
+ "CudaRT/hittable_list.h" 
+ "CudaRT/interval.h" 
+ "CudaRT/material.h" 
+ "CudaRT/perlin.h" 
+ "CudaRT/quad.h" 
+ "CudaRT/ray.h" 
+ "CudaRT/rtw_stb_image.h" 
+ "CudaRT/rtweekend.h" 
+ "CudaRT/sphere.h" 
+ "CudaRT/texture.h" 
+ "CudaRT/vec3.h")
 
 # Specific compiler flags below. We're not going to add options for all possible compilers, but if
 # you're new to CMake (like we are), the following may be a helpful example if you're using a
@@ -64,27 +92,23 @@ message (STATUS "Compiler ID: " ${CMAKE_CXX_COMPILER_ID})
 message (STATUS "Release flags: " ${CMAKE_CXX_FLAGS_RELEASE})
 message (STATUS "Debug flags: " ${CMAKE_CXX_FLAGS_DEBUG})
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    # /wd #### - Disable warning
-    # /we #### - treat warning as error
-    add_compile_options("/W4")      # Enable level-4 warnings
-    add_compile_options("/we 4265") # Class has virtual functions, but its non-trivial destructor is not virtual
-    add_compile_options("/we 5204") # Class has virtual functions, but its trivial destructor is not virtual
-    add_compile_options("/wd 4100") # unreferenced formal parameter
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    add_compile_options(-Wnon-virtual-dtor) # Class has virtual functions, but its destructor is not virtual
-    add_compile_options(-Wreorder) # Data member will be initialized after [other] data member
-    add_compile_options(-Wmaybe-uninitialized) # Variable improperly initialized
-    add_compile_options(-Wunused-variable) # Variable is defined but unused
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_options(-Wnon-virtual-dtor) # Class has virtual functions, but its destructor is not virtual
-    add_compile_options(-Wreorder) # Data member will be initialized after [other] data member
-    add_compile_options(-Wsometimes-uninitialized) # Variable improperly initialized
-    add_compile_options(-Wunused-variable) # Variable is defined but unused
+if (MSVC)
+    set(MSVC_CXX_FLAGS "/W4" "/we4265" "/we5204" "/wd4100")
+    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:${MSVC_CXX_FLAGS}>")
+    add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=/W4>")
+    add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>")
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(UNIX_CXX_FLAGS "-Wnon-virtual-dtor" "-Wreorder" "-Wunused-variable")
+    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:${UNIX_CXX_FLAGS}>")
 endif()
 
 # Add source to this project's executable.
 add_executable (RayTracingInOneWeekend ${EXTERNAL} ${SOURCE_ONE_WEEKEND})
 add_executable (RayTracingTheNextWeek ${EXTERNAL} ${SOURCE_NEXT_WEEK})
+add_executable (CudaRayTracing ${EXTERNAL} ${SOURCE_CUDA_RT})
 
+# link CUDA libraries 
+target_link_libraries(CudaRayTracing PRIVATE CUDA::cudart)
+# target_link_libraries(CudaRayTracing PRIVATE CUDA::curand)
 
+target_compile_definitions(CudaRayTracing PRIVATE USE_CUDA)

@@ -81,7 +81,7 @@ void bouncing_spheres()
 	world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
 	auto material2 = make_shared<lambertian>(color(0.4, 0.2, 0.1));
 	world.add(make_shared<sphere>(point3(-4, 1, 0), 1.0, material2));
-	auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
+	auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 1.0);
 	world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
 
 	world = hittable_list(make_shared<bvh_node>(world));
@@ -332,12 +332,10 @@ void final_scene(int image_width, int samples_per_pixel, int max_depth) {
 	auto center2 = center1 + vec3(30, 0, 0);
 	auto sphere_material = make_shared<lambertian>(color(0.7, 0.3, 0.1));
 	world.add(make_shared<sphere>(center1, center2, 50, sphere_material));
-
+	
 	world.add(make_shared<sphere>(point3(260, 150, 45), 50, make_shared<dielectric>(1.5)));
-	world.add(make_shared<sphere>(
-		point3(0, 150, 145), 50, make_shared<metal>(color(0.8, 0.8, 0.9), 1.0)
-	));
-
+	world.add(make_shared<sphere>(point3(0, 150, 145), 50, make_shared<metal>(color(0.8, 0.8, 0.9), 5.0)));
+	
 	auto boundary = make_shared<sphere>(point3(360, 150, 145), 70, make_shared<dielectric>(1.5));
 	world.add(boundary);
 	world.add(make_shared<constant_medium>(boundary, 0.2, color(0.2, 0.4, 0.9)));
@@ -380,7 +378,7 @@ void final_scene(int image_width, int samples_per_pixel, int max_depth) {
 
 
 int main() {
-	switch (10)
+	switch (1)
 	{
 		case 1:
 			bouncing_spheres();
@@ -419,7 +417,7 @@ int main() {
 			break;
 
 		default:
-			final_scene(600, 100, 20);
+			final_scene(800, 150, 20);
 			break;
 	}
 }
